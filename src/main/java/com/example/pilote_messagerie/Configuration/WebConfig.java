@@ -15,4 +15,7 @@ public class WebConfig implements WebMvcConfigurer {
     }
 }
 
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
