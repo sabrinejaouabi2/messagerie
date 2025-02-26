@@ -8,36 +8,36 @@ import { Subscription } from 'rxjs'; // Importer Subscription pour gérer l'abon
   styleUrls: ['./chat.component.css']
 })
 export class ChatComponent implements OnInit, OnDestroy {
-  messages: string[] = [];
-  message = '';
-  user: string = 'User1'; // Par exemple, un utilisateur de chat
-  private messageSubscription: Subscription; // Déclarer une variable pour gérer l'abonnement
+  message: string = '';  // Lien avec le champ de message dans le HTML
+  messages: string[] = [];  // Liste des messages reçus
 
-  constructor(private webSocketService: WebsocketService) {}
+  private messagesSubscription: Subscription;  // Abonnement aux messages
 
-  ngOnInit() {
-    // Se connecter à WebSocket
+  constructor(private webSocketService: WebsocketService) { }
+
+  ngOnInit(): void {
+    // Se connecter au serveur WebSocket
     this.webSocketService.connect();
 
-    // S'abonner pour recevoir des messages via l'observable
-    this.messageSubscription = this.webSocketService.getMessages().subscribe((message: string) => {
-      this.messages.push(message);
+    // S'abonner pour recevoir les messages du serveur WebSocket
+    this.messagesSubscription = this.webSocketService.getMessages().subscribe((msg: string) => {
+      this.messages.push(msg);  // Ajouter chaque message à la liste
     });
   }
 
-  // Envoie un message via WebSocket
-  sendMessage() {
-    if (this.message.trim()) {
-      this.webSocketService.sendMessage(this.message);
-      this.message = ''; // Réinitialise le champ du message
+  ngOnDestroy(): void {
+    // Se déconnecter et se désabonner lors de la destruction du composant
+    this.webSocketService.disconnect();
+    if (this.messagesSubscription) {
+      this.messagesSubscription.unsubscribe();  // Désabonnement pour éviter les fuites de mémoire
     }
   }
 
-  ngOnDestroy() {
-    // Déconnecte WebSocket et désabonne l'observable lors de la fermeture du composant
-    if (this.messageSubscription) {
-      this.messageSubscription.unsubscribe(); // Se désabonner pour éviter les fuites de mémoire
+  sendMessage(message: string): void {
+    if (message.trim()) {
+      // Envoyer un message via WebSocket
+      this.webSocketService.sendMessage(message);
+      this.message = '';  // Réinitialiser le champ de saisie après envoi
     }
-    this.webSocketService.disconnect();
   }
 }

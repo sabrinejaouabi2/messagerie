@@ -6,7 +6,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "messagerie-app": {
+    "mon-projet-angular": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -16,7 +16,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/messagerie-app",
+            "outputPath": "dist/mon-projet-angular",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -29,8 +29,10 @@
             "styles": [
               "src/styles.css"
             ],
-            "scripts": []
-
+            "scripts": [],
+            "allowedCommonJsDependencies": [
+    "sockjs-client"
+  ]
           },
           "configurations": {
             "production": {
@@ -65,18 +67,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "messagerie-app:build"
+            "browserTarget": "mon-projet-angular:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "messagerie-app:build:production"
+              "browserTarget": "mon-projet-angular:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "messagerie-app:build"
+            "browserTarget": "mon-projet-angular:build"
           }
         },
         "test": {
@@ -113,16 +115,16 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "messagerie-app:serve"
+            "devServerTarget": "mon-projet-angular:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "messagerie-app:serve:production"
+              "devServerTarget": "mon-projet-angular:serve:production"
             }
           }
         }
       }
     }
   },
-  "defaultProject": "messagerie-app"
+  "defaultProject": "mon-projet-angular"
 }

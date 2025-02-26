@@ -1,73 +1,48 @@
 import { Injectable } from '@angular/core';
-import { Client, Message } from '@stomp/stompjs';
 import { Subject } from 'rxjs';
+import { Client, Message } from '@stomp/stompjs';
 import * as SockJS from 'sockjs-client';
 
 @Injectable({
   providedIn: 'root'
 })
 export class WebsocketService {
+
   private stompClient: Client;
-  private readonly SOCKET_URL = 'http://localhost:8080/ws/chat';
-  private messagesSubject: Subject<string> = new Subject<string>();
-  private connected: boolean = false;
+  private messagesSubject = new Subject<string>();  // Sujet pour les messages reçus
 
-  constructor() { }
-
-  // Se connecter à WebSocket
-  connect() {
-    const socket = new SockJS(this.SOCKET_URL);
+  constructor() {
+    // Initialisation du client STOMP
     this.stompClient = new Client({
-      brokerURL: this.SOCKET_URL,
-      connectHeaders: {},
-      debug: (str) => console.log('STOMP Debug:', str),
-      reconnectDelay: 5000,
-      onConnect: (frame) => {
-        console.log('WebSocket connected: ' + frame);
-        this.connected = true;
-        this.subscribeToMessages(); // S'abonner après la connexion
-      },
-      onDisconnect: () => {
-        console.log('WebSocket disconnected');
-        this.connected = false;
+      brokerURL: 'http://localhost:8080/ws/chat', // URL du serveur WebSocket
+      webSocketFactory: () => new SockJS('http://localhost:8080/ws/chat'), // Connexion via SockJS
+      onConnect: () => {
+        console.log('WebSocket connecté');
+        this.stompClient.subscribe('/topic/messages', (message: Message) => {
+          this.messagesSubject.next(message.body);  // Envoi du message reçu au sujet
+        });
       },
       onStompError: (frame) => {
-        console.error('STOMP Error:', frame);
+        console.error('Erreur STOMP', frame);
       }
     });
-    this.stompClient.activate();
   }
 
-  // Envoyer un message au serveur WebSocket
-  sendMessage(message: string) {
-    if (this.stompClient && this.stompClient.connected) {
-      this.stompClient.publish({
-        destination: '/app/chat',
-        body: message,
-      });
-    } else {
-      console.error('WebSocket is not connected');
+  connect(): void {
+    this.stompClient.activate();  // Activer la connexion WebSocket
+  }
+
+  disconnect(): void {
+    if (this.stompClient.active) {
+      this.stompClient.deactivate();  // Désactiver la connexion WebSocket
     }
   }
 
-  // Méthode pour s'abonner aux messages
-  private subscribeToMessages() {
-    if (this.stompClient && this.connected) {
-      this.stompClient.subscribe('/topic/chat', (message: Message) => {
-        this.messagesSubject.next(message.body);
-      });
-    }
+  sendMessage(message: string): void {
+    this.stompClient.publish({ destination: '/app/chat', body: message });  // Envoi du message
   }
 
-  // Retourne un observable pour recevoir les messages
   getMessages() {
-    return this.messagesSubject.asObservable();
-  }
-
-  // Déconnexion du WebSocket
-  disconnect() {
-    if (this.stompClient) {
-      this.stompClient.deactivate();
-    }
+    return this.messagesSubject.asObservable();  // Retourner un observable pour les messages reçus
   }
 }

@@ -2,6 +2,7 @@ package com.example.pilote_messagerie.Controlleur;
 
 import java.util.List;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -12,6 +13,8 @@ import com.example.pilote_messagerie.Entity.Message;
 import com.example.pilote_messagerie.Service.MessageService;
 @RestController
 @RequestMapping("/api/messages")
+@CrossOrigin(origins = "http://localhost:4200")
+
 public class ChatController {
     private final MessageService messageService;
 
@@ -28,5 +31,5 @@ public class ChatController {
     public ResponseEntity<List<Message>> getMessages(@RequestParam String sender, @RequestParam String receiver) {
         return ResponseEntity.ok(messageService.getMessages(sender, receiver));
     }
-    
+
 }
