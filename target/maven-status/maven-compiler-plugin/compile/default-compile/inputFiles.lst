@@ -1,0 +1,12 @@
+C:\Users\sjaouabi\Documents\GitHub\messagerie\src\main\java\com\example\pilote_messagerie\Service\ChatWebSocketHandler.java
+C:\Users\sjaouabi\Documents\GitHub\messagerie\src\main\java\com\example\pilote_messagerie\Repository\MessageRepository.java
+C:\Users\sjaouabi\Documents\GitHub\messagerie\src\main\java\com\example\pilote_messagerie\Controlleur\ChatController.java
+C:\Users\sjaouabi\Documents\GitHub\messagerie\src\main\java\com\example\pilote_messagerie\Entity\Message.java
+C:\Users\sjaouabi\Documents\GitHub\messagerie\src\main\java\com\example\pilote_messagerie\Service\MessageService.java
+C:\Users\sjaouabi\Documents\GitHub\messagerie\src\main\java\com\example\pilote_messagerie\Repository\UserRepository.java
+C:\Users\sjaouabi\Documents\GitHub\messagerie\src\main\java\com\example\pilote_messagerie\Controlleur\AuthController.java
+C:\Users\sjaouabi\Documents\GitHub\messagerie\src\main\java\com\example\pilote_messagerie\Entity\User.java
+C:\Users\sjaouabi\Documents\GitHub\messagerie\src\main\java\com\example\pilote_messagerie\Service\UserService.java
+C:\Users\sjaouabi\Documents\GitHub\messagerie\src\main\java\com\example\pilote_messagerie\Configuration\WebSocketConfig.java
+C:\Users\sjaouabi\Documents\GitHub\messagerie\src\main\java\com\example\pilote_messagerie\Configuration\SecurityConfig.java
+C:\Users\sjaouabi\Documents\GitHub\messagerie\src\main\java\com\example\pilote_messagerie\PiloteMessagerieApplication.java

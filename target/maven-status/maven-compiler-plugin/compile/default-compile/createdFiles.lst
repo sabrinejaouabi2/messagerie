@@ -1,0 +1,12 @@
+com\example\pilote_messagerie\Repository\UserRepository.class
+com\example\pilote_messagerie\Service\ChatWebSocketHandler.class
+com\example\pilote_messagerie\Configuration\SecurityConfig.class
+com\example\pilote_messagerie\Entity\Message.class
+com\example\pilote_messagerie\Controlleur\AuthController.class
+com\example\pilote_messagerie\Entity\User.class
+com\example\pilote_messagerie\Configuration\WebSocketConfig.class
+com\example\pilote_messagerie\PiloteMessagerieApplication.class
+com\example\pilote_messagerie\Service\MessageService.class
+com\example\pilote_messagerie\Repository\MessageRepository.class
+com\example\pilote_messagerie\Service\UserService.class
+com\example\pilote_messagerie\Controlleur\ChatController.class

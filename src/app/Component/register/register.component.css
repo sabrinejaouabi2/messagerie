@@ -1,0 +1,83 @@
+/* Style général pour la page de formulaire */
+.register-container {
+  max-width: 500px;
+  margin: 50px auto;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  background-color: #e5e7e6; /* Couleur de fond */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  font-family: 'Arial', sans-serif;
+  color: #93441A; /* Couleur du titre */
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+label {
+  font-size: 14px;
+  color: #B67332; /* Couleur des labels */
+  margin-bottom: 5px;
+  display: block;
+}
+
+.form-control {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+  background-color: #fff;
+  box-sizing: border-box;
+}
+
+.form-control:focus {
+  border-color: #DAAB3A; /* Couleur de bordure au focus */
+  outline: none;
+}
+
+.error-message {
+  color: red;
+  font-size: 12px;
+  margin-top: 5px;
+}
+
+button.btn {
+  width: 100%;
+  padding: 12px;
+  background-color: #DAAB3A; /* Couleur de fond du bouton */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button.btn:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+button.btn:hover:enabled {
+  background-color: #B67332; /* Couleur du bouton au survol */
+}
+
+.alert {
+  text-align: center;
+  font-size: 14px;
+  color: #93441A; /* Couleur du texte de l'alerte */
+  background-color: #EEE6D8; /* Couleur de fond de l'alerte */
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.mt-3 {
+  margin-top: 20px;
+}
