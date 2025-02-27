@@ -1,43 +1,69 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { Message } from '@stomp/stompjs';
+import { Observable } from 'rxjs';
+import { AuthService } from 'src/app/Services/auth.service';
 import { WebsocketService } from 'src/app/Services/websocket.service';
-import { Subscription } from 'rxjs'; // Importer Subscription pour gérer l'abonnement
+import { IMessage } from '@stomp/stompjs';
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css']
 })
-export class DashboardComponent implements OnInit, OnDestroy {
-  messages: string[] = [];
-  message = '';
-  user: string = 'User1'; // Par exemple, un utilisateur de chat
-  private messageSubscription: Subscription; // Déclarer une variable pour gérer l'abonnement
+export class DashboardComponent implements OnInit {
+  currentUser: any;
+  friends: any[] = [];
+  selectedFriend: any;
+  messages: Message[] = [];
+  newMessageContent: string = '';
+  private stompClient: any;
 
-  constructor(private webSocketService: WebsocketService) {}
-
-  ngOnInit() {
-    // Se connecter à WebSocket
-    this.webSocketService.connect();
-
-    // S'abonner pour recevoir des messages
-    this.messageSubscription = this.webSocketService.getMessages().subscribe((message: string) => {
-      this.messages.push(message);
+  constructor(
+    private authService: AuthService,
+    private websocketService: WebsocketService
+  ) { }
+  ngOnInit(): void {
+    this.authService.currentUser.subscribe(user => {
+      console.log('Utilisateur actuel:', user);
+      if (user && user.userId) {
+        this.currentUser = user;
+        this.loadFriends(user.userId); // Chargez les amis si l'ID utilisateur est valide
+      } else {
+        console.error('L\'ID de l\'utilisateur est indéfini ou l\'utilisateur n\'est pas connecté.');
+      }
     });
   }
 
-  // Envoie un message via WebSocket
-  sendMessage() {
-    if (this.message.trim()) {
-      this.webSocketService.sendMessage(this.message);
-      this.message = ''; // Réinitialise le champ du message
+
+
+  loadFriends(userId: number): void {
+    if (userId) {
+      this.authService.getFriends(userId).subscribe(friends => {
+        this.friends = friends;
+      }, error => {
+        console.error('Erreur lors de la récupération des amis:', error);
+      });
+    } else {
+      console.error('L\'ID de l\'utilisateur est invalide');
     }
   }
 
-  ngOnDestroy() {
-    // Déconnecte WebSocket et désabonne l'observable lors de la fermeture du composant
-    if (this.messageSubscription) {
-      this.messageSubscription.unsubscribe(); // Se désabonner pour éviter les fuites de mémoire
+  sendMessage(): void {
+    if (this.newMessageContent && this.selectedFriend) {
+      // Message sans interface, juste un objet
+      const message = {
+        sender: this.currentUser,
+        receiver: this.selectedFriend,
+        content: this.newMessageContent,
+        timestamp: new Date().toISOString()
+      };
+      this.websocketService.sendMessage(message); // Envoie via WebSocket
+      this.newMessageContent = ''; // Réinitialiser le champ de texte
     }
-    this.webSocketService.disconnect();
+  }
+
+  // Méthode pour recevoir les messages via WebSocket
+  receiveMessages(): Observable<Message> {
+    return this.websocketService.receiveMessages();
   }
 }

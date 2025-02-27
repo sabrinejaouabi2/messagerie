@@ -7,37 +7,21 @@ import { Subscription } from 'rxjs'; // Importer Subscription pour gérer l'abon
   templateUrl: './chat.component.html',
   styleUrls: ['./chat.component.css']
 })
-export class ChatComponent implements OnInit, OnDestroy {
-  message: string = '';  // Lien avec le champ de message dans le HTML
-  messages: string[] = [];  // Liste des messages reçus
+export class ChatComponent  {
+  public message: string = '';
+  public messages: string[] = [];
 
-  private messagesSubscription: Subscription;  // Abonnement aux messages
-
-  constructor(private webSocketService: WebsocketService) { }
-
-  ngOnInit(): void {
-    // Se connecter au serveur WebSocket
-    this.webSocketService.connect();
-
-    // S'abonner pour recevoir les messages du serveur WebSocket
-    this.messagesSubscription = this.webSocketService.getMessages().subscribe((msg: string) => {
-      this.messages.push(msg);  // Ajouter chaque message à la liste
+  constructor(private WebsocketService: WebsocketService) {
+    this.WebsocketService.receiveMessages().subscribe((message) => {
+      this.messages.push(message.body);
     });
   }
-
-  ngOnDestroy(): void {
-    // Se déconnecter et se désabonner lors de la destruction du composant
-    this.webSocketService.disconnect();
-    if (this.messagesSubscription) {
-      this.messagesSubscription.unsubscribe();  // Désabonnement pour éviter les fuites de mémoire
+/*
+  sendMessage(): void {
+    if (this.message.trim()) {
+      this.WebsocketService.sendMessage(this.message);
+      this.message = ''; // Clear the input field after sending
     }
   }
-
-  sendMessage(message: string): void {
-    if (message.trim()) {
-      // Envoyer un message via WebSocket
-      this.webSocketService.sendMessage(message);
-      this.message = '';  // Réinitialiser le champ de saisie après envoi
-    }
-  }
+    */
 }

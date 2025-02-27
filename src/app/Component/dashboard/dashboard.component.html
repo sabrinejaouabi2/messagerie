@@ -1,12 +1,24 @@
-<div class="chat-container">
-  <div class="chat-messages">
-    <div *ngFor="let msg of messages" class="message">
-      {{ msg }}
-    </div>
+<div *ngIf="currentUser">
+  <h2>Tableau de bord - Bienvenue {{ currentUser.username }}</h2>
+
+  <div>
+    <h3>Liste des amis</h3>
+    <ul>
+      <li *ngFor="let friend of friends" (click)="selectedFriend = friend">
+        {{ friend.username }}
+      </li>
+    </ul>
   </div>
 
-  <div class="chat-input">
-    <input [(ngModel)]="message" type="text" placeholder="Écrivez un message..." />
+  <div *ngIf="selectedFriend">
+    <h3>Chat avec {{ selectedFriend.username }}</h3>
+    <div class="chat-box">
+      <div *ngFor="let msg of messages">
+        <p>{{ msg.sender.username }}: {{ msg.content }}</p>
+      </div>
+    </div>
+
+    <textarea [(ngModel)]="newMessageContent" placeholder="Entrez un message..."></textarea>
     <button (click)="sendMessage()">Envoyer</button>
   </div>
 </div>

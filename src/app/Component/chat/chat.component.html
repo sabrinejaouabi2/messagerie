@@ -1,12 +1,9 @@
+<!-- src/app/components/chat/chat.component.html -->
 <div class="chat-container">
-  <div class="messages-container">
-    <div *ngFor="let message of messages" class="message">
-      <p>{{ message }}</p>
-    </div>
+  <div class="messages">
+    <div *ngFor="let msg of messages" class="message">{{ msg }}</div>
   </div>
 
-  <div class="input-container">
-    <input type="text" [(ngModel)]="message" placeholder="Tapez un message..." (keyup.enter)="sendMessage(message)">
-    <button (click)="sendMessage(message)">Envoyer</button>
-  </div>
+  <input [(ngModel)]="message" placeholder="Type a message" />
+  <button >Send</button>
 </div>
