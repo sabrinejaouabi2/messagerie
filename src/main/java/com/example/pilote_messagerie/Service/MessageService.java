@@ -1,5 +1,4 @@
 package com.example.pilote_messagerie.Service;
-
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -15,30 +14,31 @@ import com.example.pilote_messagerie.Repository.UserRepository;
 
 @Service
 public class MessageService {
- private final UserRepository userRepository;
-    private final FriendRepository friendRepository;
+ private final FriendRepository friendRepository;
     private final MessageRepository messageRepository;
 
     public MessageService(UserRepository userRepository, FriendRepository friendRepository, MessageRepository messageRepository) {
-      this.userRepository = userRepository;
       this.friendRepository = friendRepository;
       this.messageRepository = messageRepository;
   }
 
-   // Récupérer la liste des amis d'un utilisateur en excluant l'utilisateur lui-même
-    public List<User> getFriends(Long userId) {
-        List<Friend> friends = friendRepository.findByUserId(userId);
-        return friends.stream()
-                      .map(friend -> friend.getFriend())
-                      .filter(friend -> !friend.getId().equals(userId))  // Exclure l'utilisateur lui-même
-                      .collect(Collectors.toList());
-    }
 
-    // Récupérer l'historique des messages entre deux utilisateurs
-    public List<Message> getMessageHistory(User sender, User receiver) {
-        return messageRepository.findBySenderAndReceiver(sender, receiver);
-    }
+// Récupérer la liste des amis d'un utilisateur en excluant l'utilisateur lui-même
+public List<User> getFriends(Long userId) {
+    // Récupérer les amis où l'utilisateur est 'user'
+    List<Friend> friendsAsUser = friendRepository.findByUserUserId(userId); // Utilisateur comme 'user'
 
+    // Fusionner les deux listes d'amis et exclure l'utilisateur lui-même
+    return friendsAsUser.stream()
+            .map(friend -> friend.getFriend())  // Récupérer le 'friend' de l'entité Friend
+            .filter(friend -> !friend.getUserId().equals(userId))  // Exclure l'utilisateur lui-même
+            .collect(Collectors.toList());
+}
+
+
+
+
+   
     // Enregistrer un message dans la base de données
     public void saveMessage(Message message) {
         message.setTimestamp(LocalDateTime.now());

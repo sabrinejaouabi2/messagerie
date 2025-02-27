@@ -1,16 +1,17 @@
 package com.example.pilote_messagerie.Controlleur;
-
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.pilote_messagerie.Entity.User;
@@ -38,7 +39,6 @@ public ResponseEntity<Map<String, String>> register(@RequestBody User user) {
 }
 
 
-    
 @PostMapping("/login")
 public ResponseEntity<Object> login(@RequestBody User user) {
     Optional<User> existingUser = userService.findByUsername(user.getUsername());
@@ -46,9 +46,12 @@ public ResponseEntity<Object> login(@RequestBody User user) {
         passwordEncoder.matches(user.getPassword(), existingUser.get().getPassword())) {
         
         // Créer un objet de réponse JSON
-        Map<String, String> response = new HashMap<>();
+        Map<String, Object> response = new HashMap<>();
         response.put("message", "Connexion réussie");
-        return ResponseEntity.ok(response);  // Retourne un JSON
+        response.put("userId", existingUser.get().getUserId());  // Ajout de l'ID utilisateur
+        response.put("username", existingUser.get().getUsername());  // Ajout du nom d'utilisateur si nécessaire
+        
+        return ResponseEntity.ok(response);  // Retourne un JSON avec message, userId et username
     }
     
     // Réponse pour échec de la connexion
@@ -58,4 +61,16 @@ public ResponseEntity<Object> login(@RequestBody User user) {
 }
 
 
+ 
+
+@GetMapping("/currentUser")
+public User getCurrentUser(@RequestParam String username) {
+    return userService.getCurrentUser(username);  // Appel de la méthode dans le service
+}
+
+@GetMapping("/users")
+public List<User> getAllUsers(@RequestParam Long loggedInUserId) {
+    return userService.getAllUsersExceptLoggedIn(loggedInUserId);
+}
+ 
 }

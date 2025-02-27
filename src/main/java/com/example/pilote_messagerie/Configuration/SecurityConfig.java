@@ -15,7 +15,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
             .authorizeRequests()
-            .antMatchers("/api/**").permitAll() // Autoriser l'accès à l'API
+            .antMatchers("/api/**").permitAll() 
+            .antMatchers("/ws/**").permitAll()// Autoriser l'accès à l'API
             .anyRequest().authenticated(); // Autres requêtes doivent être authentifiées
     }
     @Bean
